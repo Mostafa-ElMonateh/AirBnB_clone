@@ -15,16 +15,16 @@ class BaseModel:
             *args (any): Unused
             **kwargs (dict): Keys/values pairs of attributes
         """
-        dtformat = "%Y-%m-%dT%H:%M:%S.%f"
+        tform = "%Y-%m-%dT%H:%M:%S.%f"
         self.id = str(uuid4())
         self.created_at = datetime.today()
         self.updated_at = datetime.today()
         if len(kwargs) != 0:
-            for key, value in kwargs.items():
+            for key, val in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(value, dtformat)
+                    self.__dict__[key] = datetime.strptime(val, tform)
                 else:
-                    self.__dict__[key] = value
+                    self.__dict__[key] = val
         else:
             models.storage.new(self)
 
@@ -34,18 +34,18 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        """returns the dictionary of BaseModel instance.
+        """returns dictionary of BaseModel instance
 
-        includeing keys/values pairs, __class__ represents
-        the class name of an object.
+        including keys/values pairs __class__ represents
+        the class name of an object
         """
-        copy_dict = self.__dict__.copy()
-        copy_dict["created_at"] = self.created_at.isoformat()
-        copy_dict["updated_at"] = self.updated_at.isoformat()
-        copy_dict["__class__"] = self.__class__.__name__
-        return copy_dict
+        rdict = self.__dict__.copy()
+        rdict["created_at"] = self.created_at.isoformat()
+        rdict["updated_at"] = self.updated_at.isoformat()
+        rdict["__class__"] = self.__class__.__name__
+        return rdict
 
     def __str__(self):
-        """returns str repre of BaseModel instance"""
-        className = self.__class__.__name__
-        return "[{}] ({}) {}".format(className, self.id, self.__dict__)
+        """returns str represe of BaseModel instance"""
+        clname = self.__class__.__name__
+        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
